@@ -6,3 +6,7 @@
 canvas {
     background-color: #212121;
 }
+
+body {
+    overflow: hidden;
+}
