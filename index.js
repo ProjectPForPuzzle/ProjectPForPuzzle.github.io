@@ -2,7 +2,7 @@ function startGame() {
     world.start();
 }
 
-//hello
+//hello world
 
 var world = {
     canvas: document.createElement("canvas"),
@@ -27,7 +27,7 @@ var world = {
     }
 }
 
-let testText = new textComponent("30px", "Consolas", "white", 100, 100);
+let testText = new textComponent("30px", "Consolas", "red", 100, 100);
 testText.text = "Time: 0";
 
 let counter = 0;
