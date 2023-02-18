@@ -2,6 +2,8 @@ function startGame() {
     world.start();
 }
 
+//hello
+
 var world = {
     canvas: document.createElement("canvas"),
 
