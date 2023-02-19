@@ -40,7 +40,7 @@ function tileComponent(type, x, y) {
 }
 
 
-const tType = { "f": "Floor.png", "w": "walls2.png", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
+const tType = { "f": "Floor.png", "w": "walls2.png", "t": "#F3F322", "e": "Enemy.png", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
 function Maze(mazeData, rows, enemies, keys) {
     this.data = mazeData;
     this.rows = rows;
@@ -73,10 +73,11 @@ function Maze(mazeData, rows, enemies, keys) {
             this.startPosY = yPos * tileSize + 5;
         }
 
-        else if (tType[this.data[i]] == "#73F411") {
+        else if (this.data[i] == "e") {
             
             this.enemySet[this.enemiesI] = new enemyComponent(xPos * tileSize, yPos * tileSize, 100, 100);
             this.enemiesI++;
+            console.log(this.enemiesI)  
         }
 
         else if (tType[this.data[i]] == "#F3F322") {

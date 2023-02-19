@@ -1,5 +1,5 @@
 const inputKey = { left: 37, up: 38, right: 39, down: 40 };
-tType = { "f": "Floor.png", "w": "walls2.png", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
+tType = { "f": "Floor.png", "w": "walls2.png", "t": "#F3F322", "e": "Enemy.png", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
 
 const spriteOne = new Image();
 spriteOne.src = "one.png";
