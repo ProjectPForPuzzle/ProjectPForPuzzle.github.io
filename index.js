@@ -15,7 +15,7 @@ function startGame() {
     player = new playerComponent(50, 50, "red", 300, 300);
 
     let tutorialMazeData = ""; //ARYA ADD THE MAZE HERE
-    let = tutorial = new Maze(tutorialMazeData, 40, 1, 1);
+    let tutorial = new Maze(tutorialMazeData, 40, 1, 1);
 
     monster = new enemyComponent();
 
