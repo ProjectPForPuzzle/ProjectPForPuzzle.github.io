@@ -57,6 +57,7 @@ function Maze(mazeData, rows, enemies, keys) {
     this.translator = null;
     this.keyList = new Array();
     this.keyIter = 0;
+    this.exit = null;
 
     for (i = 0; i < this.tileNum; i++) {
         let type = tType[this.data[i]];
@@ -79,12 +80,16 @@ function Maze(mazeData, rows, enemies, keys) {
         }
 
         else if (tType[this.data[i]] == "#F3F322") {
-            this.translator = new translator(xPos * tileSize, yPos * tileSize);
+            this.translator = new translator(xPos * tileSize, yPos * tileSize, this.keys);
         }
 
         else if (tType[this.data[i]] == "#FFC0CB") {
             this.keyList[this.  keyIter] = new key(xPos * tileSize, yPos * tileSize);
             this.keyIter++;
+        }
+
+        else if (tType[this.data[i]] == "#000000") {
+            this.exit = new Exit(xPos * tileSize, yPos * tileSize);
         }
     }
 

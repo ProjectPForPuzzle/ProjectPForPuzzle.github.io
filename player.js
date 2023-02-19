@@ -36,6 +36,9 @@ function playerComponent(x, y, width, height, speed) {
     this.hitFrame = 0;
     this.animationFrame = 0;
     this.facingLeft = false;
+    this.keysCollected = 0;
+    this.holdingKey = false;
+    this.finished = false;
 
     this.update = function(maze) {
         this.animationFrame++;
@@ -90,11 +93,25 @@ function playerComponent(x, y, width, height, speed) {
         this.y = updateY;
 
         if (colliding(this.x, this.y, this.width, this.height, maze.translator)) {
-            console.log("update puzzle");
+            this.holdingKey = false;
+            if (this.keysCollected == maze.translator.keysNeeded) {
+                this.finished = true;
+            }
         }
         for (let i = 0; i < maze.keys; i++) {
-            if (colliding(this.x, this.y, this.width, this.height, maze.keyList[i])) {
-                console.log("collecting key");
+            if (colliding(this.x, this.y, this.width, this.height, maze.keyList[i]) && !this.holdingKey) {
+                
+                if (!maze.keyList[i].collected) {
+                    this.keysCollected++; 
+                    maze.keyList[i].collected = true;
+                    this.holdingKey = true;
+                }
+            }
+        }
+
+        if (colliding(this.x, this.y, this.width, this.height, maze.exit)) {
+            if (this.finished) {
+                world.stop();
             }
         }
         

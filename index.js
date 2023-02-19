@@ -3,6 +3,7 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 var player;
 var tutorial;
+var vignette;
 
 let rightDown = false;
 let leftDown = false;
@@ -23,6 +24,8 @@ function startGame() {
     world.camera.follow(player);
 
     world.start();
+
+    //vignette = new Vignette(world.canvas);
 }
 
 var world = {
