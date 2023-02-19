@@ -22,7 +22,7 @@ const translatoeer = new Image();
 translatoeer.src = "Translator.png";
 
 
-function tileComponent(type, x, y) {
+function tileComponent(type, x, y, key) {
     this.width = tileSize;
     this.height = tileSize;
     this.type = type;
@@ -30,6 +30,7 @@ function tileComponent(type, x, y) {
     this.x = x;
     this.y = y;
     this.rand = 0;
+    this.key = key || null;
 
     this.draw = function(camera) {
         let cameraPositionX = camera.width / 2 + (this.x - camera.x);
@@ -49,6 +50,7 @@ function tileComponent(type, x, y) {
                 this.rand = r;
                 
             }
+            if (!this.key.collected) {
             if (this.rand == 1) {
                 ctx.drawImage(floorImage, cameraPositionX, cameraPositionY, this.width, this.height);
 
@@ -69,6 +71,10 @@ function tileComponent(type, x, y) {
 
                 ctx.drawImage(D, cameraPositionX, cameraPositionY, this.width, this.height);
             }
+        }else {
+            ctx.drawImage(floorImage, cameraPositionX, cameraPositionY, this.width, this.height);
+
+        }
         } else if (this.type == "Translator.png") {
             ctx.drawImage(floorImage, cameraPositionX, cameraPositionY, this.width, this.height);
             ctx.drawImage(translatoeer, cameraPositionX, cameraPositionY, this.width, this.height);
@@ -110,7 +116,6 @@ function Maze(mazeData, rows, enemies, keys) {
         var xPos = i % this.rows;
         var yPos = Math.floor(i / this.rows);
 
-        this.tileSet[i] = new tileComponent(type, xPos * (tileSize - 1), yPos * tileSize);
 
         if (tType[this.data[i]] == "#FF00FF") {
             
@@ -137,6 +142,8 @@ function Maze(mazeData, rows, enemies, keys) {
         else if (tType[this.data[i]] == "#000000") {
             this.exit = new Exit(xPos * tileSize, yPos * tileSize);
         }
+
+        this.tileSet[i] = new tileComponent(type, xPos * (tileSize - 1), yPos * tileSize, this.keyList[this.keyIter - 1]);
     }
 
     this.update = function(target) {
