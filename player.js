@@ -1,5 +1,5 @@
 const inputKey = { left: 37, up: 38, right: 39, down: 40 };
-tileType = { floor: "#212121", wall: "#FFFFFF", translator: "#F3F322", spawner: "#73F411" };
+tType = { "f": "#212121", "w": "#FFFFFF", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
 
 
 function playerComponent(x, y, width, height, color, speed) {
@@ -27,10 +27,11 @@ function playerComponent(x, y, width, height, color, speed) {
 
         let updateX = targetX;
         let updateY = targetY;
-        
         if (targetX != this.x || targetY != this.y) {
-            for (let i = 0; i < maze.num_tiles; i++) {
-                if (maze.tileSet[i].type == tileType.wall) {
+            for (let i = 0; i < maze.tileNum; i++) {
+                //console.log(tType["w"])
+                if (maze.tileSet[i].type === tType["w"]) {
+                    //console.log("yo");
                     if (colliding(targetX, this.y, this.width, this.height, maze.tileSet[i])) {
                         if (updateX + this.width > maze.tileSet[i].x && this.x + this.width < maze.tileSet[i].x) updateX = maze.tileSet[i].x - this.width - 1;
                         else if (updateX < maze.tileSet[i].x + maze.tileSet[i].width && this.x > maze.tileSet[i].x + maze.tileSet[i].width) updateX = maze.tileSet[i].x + maze.tileSet[i].width + 1;

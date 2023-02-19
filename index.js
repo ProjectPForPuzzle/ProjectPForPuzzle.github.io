@@ -2,7 +2,7 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 var player;
-var monster;
+var tutorial;
 
 let rightDown = false;
 let leftDown = false;
@@ -10,10 +10,12 @@ let upDown = false;
 let downDown = false;
 
 function startGame() {
-    player = new playerComponent(50, 50, "red", 300, 300);
 
-    let tutorialMazeData = ""; //ARYA ADD THE MAZE HERE
-    let tutorial = new Maze(tutorialMazeData, 40, 1, 1);
+    let tutorialMazeData = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwewwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffftffffffffffwwwwwwwwwwwfwwwwwwwwwffffffffffffffffffffffffwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwsfffwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfffxwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwffffffffffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffkfffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwffffffffffffffffffffffffffffffffwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"; //ARYA ADD THE MAZE HERE
+    tutorial = new Maze(tutorialMazeData, 40, 1, 1);
+
+    player = new playerComponent(tutorial.startPosX, tutorial.startPosY, 50, 50, "red", 10);
+
 
     world.camera = new camera(300, 300);
     world.camera.follow(player);
@@ -54,7 +56,6 @@ function updateWorld() {
     // Draw
     world.clear();
     tutorial.draw(world.camera);
-
     player.draw(world.camera);
 }
 
