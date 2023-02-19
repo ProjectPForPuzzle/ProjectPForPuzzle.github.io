@@ -63,3 +63,56 @@ function playerComponent(x, y, width, height, color, speed) {
         ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }
+
+
+
+function colliding(entity1x, entity1y, entity1w, entity1h, entity2) {
+    if (entity1x + entity1w > entity2.x && entity1x < entity2.x + entity2.width && entity1y + entity1h > entity2.y && entity1y < entity2.y + entity2.height) return true;
+    else return false;
+}
+
+function intoWall(oldX, oldY, newX, newY, width, height, wall) {
+    let ret = new Array();
+    ret[0] = newX;
+    ret[1] = newY;
+
+    let newLeft = newX;
+    let newRight = newX + width;
+    let newTop = newY;
+    let newBottom = newY + height;
+
+    let oldLeft = oldX;
+    let oldRight = oldX + width;
+    let oldTop = oldY;
+    let oldBottom = oldY + height;
+
+    
+    if (newBottom > wall.y && newTop < wall.y + wall.height && newLeft != oldLeft) {
+        //push left
+        console.log(oldX + width, newX + width, wall.x);
+        if (oldRight < wall.x && newRight > wall.x) {
+            console.log("push left");
+
+            ret[0] = wall.x - wall.width;
+        }
+
+        //push right
+        else if (oldLeft > wall.x + wall.width && newLeft < wall.x + wall.width) {
+            ret[0] = wall.x + wall.width;
+        }
+    }
+
+    if (newRight > wall.x && newLeft < wall.x + wall.width) {
+        //push up
+        if (oldBottom < wall.y && newBottom > wall.y) {
+            ret[1] = wall.y - wall.height;
+        }
+
+        //push down
+        else if (oldTop > wall.Y + wall.height && newTop < wall.y + wall.height) {
+            ret[1] = wall.y + wall.height;
+        }
+    }
+
+    return ret;
+}
