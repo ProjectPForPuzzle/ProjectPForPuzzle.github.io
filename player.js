@@ -12,8 +12,12 @@ function playerComponent(x, y, width, height, color, speed) {
     this.dirY = 0;
     this.speed = speed || 6;
     this.health = 3;
+    this.hitFrame = 0;
 
     this.update = function(maze) {
+        if (this.hitFrame > 0) this.hitFrame--;
+        if (this.hitFrame % 2 == 0) this.color = "green";
+        else this.color = "red";
         this.dirX = 0;
         if (rightDown) this.dirX++;
         if (leftDown) this.dirX--;

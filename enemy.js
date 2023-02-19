@@ -79,8 +79,9 @@ function enemyComponent(x, y, width, height, color, speed) {
                 this.state = state.updatingTarget;
         }
 
-        if (colliding(this.x, this.y, this.width, this.height, target)) {
+        if (colliding(this.x, this.y, this.width, this.height, target) && target.hitFrame == 0) {
             target.health--;
+            target.hitFrame = 30;
             if (target.health <= 0) {
                 world.stop();
                 startGame()
