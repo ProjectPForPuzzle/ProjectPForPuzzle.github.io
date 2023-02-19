@@ -1,8 +1,8 @@
-{
-    "compilerOptions": {
-        "target":"ES6",
-        "module": "system",
-        "strict": true
-    },
+// {
+//     "compilerOptions": {
+//         "target":"ES6",
+//         "module": "system",
+//         "strict": true
+//     },
   
-}
+// }
