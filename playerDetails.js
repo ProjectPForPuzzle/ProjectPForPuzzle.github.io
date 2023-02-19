@@ -18,9 +18,10 @@ class PlayerDetails {
             }
         }
 
-        req.open("POST", "https://272.selfip.net/apps/hlvQ3jZ0kh/collections/usersTest/documents/")
+        req.open("POST", "https://272.selfip.net/apps/hlvQ3jZ0kh/collections/users/documents/")
         req.setRequestHeader("Content-Type", "application/json");
         req.send(JSON.stringify(newS));
+        
     }
     
 }
