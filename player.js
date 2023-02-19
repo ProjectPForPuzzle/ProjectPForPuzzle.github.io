@@ -1,26 +1,71 @@
 const inputKey = { left: 37, up: 38, right: 39, down: 40 };
-tType = { "f": "#212121", "w": "#FFFFFF", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
+tType = { "f": "Floor.png", "w": "walls2.png", "t": "#F3F322", "e": "Enemy.png", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
 
+const spriteOne = new Image();
+spriteOne.src = "one.png";
 
-function playerComponent(x, y, width, height, color, speed) {
+const spriteTwo = new Image();
+spriteTwo.src = "two.png";
+
+const spriteThree = new Image();
+spriteThree.src = "three.png";
+
+const spriteFour = new Image();
+spriteFour.src = "four.png";
+
+const spriteFive = new Image();
+spriteFive.src = "five.png";
+
+function playerComponent(x, y, width, height, speed) {
     this.x = x || 0;
     this.y = y || 0;
     this.width = width || 50;
     this.height = height || 50;
-    this.color = color || "red";
+    this.image = spriteOne;
+    
+    this.sprites = new Array();
+    this.sprites[0] = spriteOne;
+    this.sprites[1] = spriteTwo;
+    this.sprites[2] = spriteThree;
+    this.sprites[3] = spriteFour;
+    this.sprites[4] = spriteFive;
     this.dirX = 0;
     this.dirY = 0;
     this.speed = speed || 6;
     this.health = 3;
     this.hitFrame = 0;
+    this.animationFrame = 0;
+    this.facingLeft = false;
+    this.keysCollected = 0;
+    this.holdingKey = false;
+    this.finished = false;
+    this.hpText = new textComponent("60px", "Arial", "white", window.innerWidth / 2 - 30, 100);
+    this.hpText.text = "HP: 3/3";
+    this.carryingKeyText = new textComponent("30px", "Arial", "white", window.innerWidth / 2 - 100, 150);
+    this.carryingKeyText.text = "";
+    this.shakeFrames = 0;
 
     this.update = function(maze) {
+        if (this.holdingKey) this.carryingKeyText.text = "Carrying key: cannot carry more"
+        else this.carryingKeyText.text = ""
+        if (this.shakeFrames > 0) this.shakeFrames--;
+        else shake = false;
+        this.animationFrame++;
+        if (this.animationFrame > 49) this.animationFrame = 0;
+        this.image = this.sprites[Math.floor(this.animationFrame / 10)];
+        //console.log(Math.floor(this.animationFrame / 10));
         if (this.hitFrame > 0) this.hitFrame--;
-        if (this.hitFrame % 2 == 0) this.color = "green";
-        else this.color = "red";
+        //if (this.hitFrame % 2 == 0) this.color = "green";
+        //else this.color = "red";
         this.dirX = 0;
-        if (rightDown) this.dirX++;
-        if (leftDown) this.dirX--;
+        if (rightDown) {
+            this.dirX++; 
+            this.facingLeft = false;
+        }
+        if (leftDown) {
+            this.dirX--;
+            this.facingLeft = true;
+        }
 
         this.dirY = 0;
         if (downDown) this.dirY++;
@@ -55,18 +100,57 @@ function playerComponent(x, y, width, height, color, speed) {
 
         this.x = updateX;
         this.y = updateY;
+
+        if (colliding(this.x, this.y, this.width, this.height, maze.translator)) {
+            this.holdingKey = false;
+            if (this.keysCollected == maze.translator.keysNeeded) {
+                this.finished = true;
+            }
+        }
+        for (let i = 0; i < maze.keys; i++) {
+            if (colliding(this.x, this.y, this.width, this.height, maze.keyList[i]) && !this.holdingKey) {
+                
+                if (!maze.keyList[i].collected) {
+                    this.keysCollected++; 
+                    maze.keyList[i].collected = true;
+                    this.holdingKey = true;
+                }
+            }
+        }
+
+        if (colliding(this.x, this.y, this.width, this.height, maze.exit)) {
+            if (this.finished) {
+                world.stop();
+                levelNum++;
+                startGame("" + levelNum);
+            }
+        }
+        
         
     }
 
     this.draw = function(camera) {
+
         let cameraPositionX = camera.width / 2 + (this.x - camera.x);
         let cameraPositionY = camera.height / 2 + (this.y - camera.y);
         
         ctx = world.context;
 
-        ctx.fillStyle = this.color;
+        //ctx.fillStyle = this.color;
+        ctx.save();  
+        let horizontal = !this.facingLeft;
 
-        ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
+        
+        if (horizontal) {
+            ctx.translate(cameraPositionX + this.width, cameraPositionY);
+            ctx.scale(-1, 1);
+            ctx.drawImage(this.image, 0, 0, this.width, this.height);
+
+        } else ctx.drawImage(this.image, cameraPositionX, cameraPositionY, this.width, this.height);
+        ctx.restore();
+        this.hpText.draw();
+        this.carryingKeyText.draw();
+        //ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }
 

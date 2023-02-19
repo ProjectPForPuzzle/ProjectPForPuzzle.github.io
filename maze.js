@@ -1,9 +1,18 @@
 const tileSize = 80;
 
+const cobbleImage = new Image();
+cobbleImage.src = "walls2.png";
+
+const floorImage = new Image();
+floorImage.src = "Floor.png";
+
+
+
 function tileComponent(type, x, y) {
     this.width = tileSize;
     this.height = tileSize;
     this.type = type;
+    this.image = new Image();
     this.x = x;
     this.y = y;
 
@@ -13,14 +22,25 @@ function tileComponent(type, x, y) {
 
         ctx = world.context;
 
-        ctx.fillStyle = this.type;
+        if (this.type == "Floor.png") {
+            ctx.imageSmoothingQuality = "high";
+            ctx.drawImage(floorImage, cameraPositionX, cameraPositionY, this.width, this.height);
+        } else if (this.type == "walls2.png") {
+            ctx.imageSmoothingQuality = "high";
+            ctx.drawImage(cobbleImage, cameraPositionX, cameraPositionY, this.width, this.height);
+        } else {
+            ctx.fillStyle = this.type;
 
-        ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
+
+            ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
+        }
+
+        
     }
 }
 
 
-const tType = { "f": "#212121", "w": "#FFFFFF", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
+const tType = { "f": "Floor.png", "w": "walls2.png", "t": "#F3F322", "e": "Enemy.png", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
 function Maze(mazeData, rows, enemies, keys) {
     this.data = mazeData;
     this.rows = rows;
@@ -34,6 +54,10 @@ function Maze(mazeData, rows, enemies, keys) {
     this.tileSet = new Array();
     this.enemySet = new Array();
     this.enemiesI = 0;
+    this.translator = null;
+    this.keyList = new Array();
+    this.keyIter = 0;
+    this.exit = null;
 
     for (i = 0; i < this.tileNum; i++) {
         let type = tType[this.data[i]];
@@ -41,7 +65,7 @@ function Maze(mazeData, rows, enemies, keys) {
         var xPos = i % this.rows;
         var yPos = Math.floor(i / this.rows);
 
-        this.tileSet[i] = new tileComponent(type, xPos * tileSize, yPos * tileSize);
+        this.tileSet[i] = new tileComponent(type, xPos * (tileSize - 1), yPos * tileSize);
 
         if (tType[this.data[i]] == "#FF00FF") {
             
@@ -49,16 +73,30 @@ function Maze(mazeData, rows, enemies, keys) {
             this.startPosY = yPos * tileSize + 5;
         }
 
-        if (tType[this.data[i]] == "#73F411") {
+        else if (this.data[i] == "e") {
             
-            this.enemySet[this.enemiesI] = new enemyComponent(xPos * tileSize, yPos * tileSize);
+            this.enemySet[this.enemiesI] = new enemyComponent(xPos * tileSize, yPos * tileSize, 100, 100);
             this.enemiesI++;
+            console.log(this.enemiesI)  
+        }
+
+        else if (tType[this.data[i]] == "#F3F322") {
+            this.translator = new translator(xPos * tileSize, yPos * tileSize, this.keys);
+        }
+
+        else if (tType[this.data[i]] == "#FFC0CB") {
+            this.keyList[this.keyIter] = new key(xPos * tileSize, yPos * tileSize);
+            this.keyIter++;
+        }
+
+        else if (tType[this.data[i]] == "#000000") {
+            this.exit = new Exit(xPos * tileSize, yPos * tileSize);
         }
     }
 
     this.update = function(target) {
         for (let i = 0; i < this.enemiesNum; i++) {
-            this.enemySet[i].update(target);
+            this.enemySet[i].update(target, this);
         }
     }
 

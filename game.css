@@ -1,0 +1,48 @@
+@font-face {
+    font-family: NewRodin;
+    src: url("newrodin/newrodin.otf") format("opentype");
+}
+
+canvas {
+    background-image: url("walls2.png");
+    filter: brightness(50%);
+}
+
+#canvas2 {
+    z-index: 99;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glowing {
+    width: 50px;
+    height: 50px;
+    left: 50%;
+    right: 50%;
+    filter: brightness(200%);
+}
+
+body {
+    overflow: hidden;
+}
+
+.overlay {
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    min-height: 100%;
+    background: -webkit-radial-gradient(rgba(255, 255, 255, 1),
+                                        rgba(255, 255, 255, 0.1) 0%,
+                                        rgba(0, 0, 0, 1));
+    bottom: 0;
+    display: -webkit-box;
+    left: 0;
+    padding: 20px;
+    padding-bottom: 130px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 10;
+  }

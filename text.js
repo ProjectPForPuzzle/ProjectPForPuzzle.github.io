@@ -4,6 +4,7 @@ function textComponent(fontSize, fontName, color, x, y) {
     this.color = color;
     this.x = x;
     this.y = y;
+    this.text = "e";
 
     this.draw = function() {
         ctx = world.context;
