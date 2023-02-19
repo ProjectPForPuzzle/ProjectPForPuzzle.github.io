@@ -3,21 +3,28 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 var player;
 var tutorial;
-var vignette;
+var currentLevel;
 
 let rightDown = false;
 let leftDown = false;
 let upDown = false;
 let downDown = false;
+let levelNum = 1;
+let shake  = false;
 
-function startGame() {
+let tutorialMazeData = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwewwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffftffffffffffwwwwwwwwwwwfwwwwwwwwwffffffffffffffffffffffffwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwsfffwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfffxwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwffffffffffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffkfffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwffffffffffffffffffffffffffffffffwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"; //ARYA ADD THE MAZE HERE
+let maze1Data = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwewfffffffffffffffffffffffffffffffffffwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwffffwwwwwwwwwwwwwwwwwwwwwwwwwwwwwffwwwfwffffwffffffffffffkffffffffffffffwffwWwfwffffwfwwwwwwwwwwwwwwwwwwwwwwwwwfwffwwwfwffffwfffffffffffffffffffffffffffwffwWwfwffffwfffffffffffffffffffffffffffwffwwwfwffffwfffffffffffffffffffffffffffwffwwwfwffffwfwffffwwwwwwwwwwfffffffffwfwffwwwfwwwwwwfwwwwwwffffffffwwwwwwwwwwwfwwwwwwfffffffffffffffffttffffffffffffffffffxwwfwwwwwwfwwwwwwffffffffwwwwwwwwwwwfwwwwwfffffffwfwffffwwwwwwwwwwfffffffffwfwffwwfffffffwfwfffffffffffffffffffffffwfwffwwfffffffwfwfffffffffffffffffffffffwfwffwwfffffffwfwfffffffffffffffffffffffwfwffwwfffffffwfwfffffffffffffffffffffffwfwffwwfffffffwfwwwwwwwwwwwwwwwwwwwwwwwwwfwffwwfffffffwffffffffffffffffffffffffffkwffwwfffffffwfffwwwwwwwwwwwwwwwwwwwwwwwwwffwwfffffffwfffwffffffffffffffffffffffffffwwfffffffwfffwwwwwwwwwwwwwwwwwffffffffffwwfffffffwfffffffffffffffffffwffffffffffwwfffffffwfwwwwwwwwwwwwwwwwffwffffffffffwwfffffffwfwffffffffffffffwffwffffffffffwwfffffffwfwffffffffffffffwffwffffffffffwwwwwwwwwwfwffffffffffffffwffwffffffffffwwfkfffffffwffffffffffffffwffwffffffffffwwfwwwwwwwwwwwwwwwwwwwwwwwwffwffffffffffwwfffffffffffffffffffffffffffwffffffffffwwfffffffffffffffffffffffffffwffffffffffwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
 
-    let tutorialMazeData = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwewwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwwwwwwwwfwwwwwwwwwfffffffftffffffffffwwwwwwwwwwwfwwwwwwwwwffffffffffffffffffffffffwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwfffffffffffffffffffwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwsfffwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwfffxwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwwwwwwwwwwffffffffffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffkfffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwfwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwffffffffffffffffffffffffffffffffwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"; //ARYA ADD THE MAZE HERE
-    tutorial = new Maze(tutorialMazeData, 40, 1, 1);
 
-    player = new playerComponent(tutorial.startPosX, tutorial.startPosY, 50, 50, 10);
+const levelSelector = {"1": new Maze(tutorialMazeData, 40, 1, 1), "2": new Maze(maze1Data, 40, 1, 3)};
 
-    blockingTile = new tileComponent("#FFFFFF", tutorial.startPosX - 80, tutorial.startPosY);
+function startGame(level) {
+
+    currentLevel = levelSelector[level];
+
+    player = new playerComponent(currentLevel.startPosX, currentLevel.startPosY, 50, 50, 10);
+
+    blockingTile = new tileComponent("#FFFFFF", currentLevel.startPosX - 80, currentLevel.startPosY);
 
 
     world.camera = new camera(300, 300);
@@ -51,18 +58,41 @@ var world = {
     }
 }
 
+function preShake() {
+    ctx = world.context;
+
+    ctx.save();
+    var dx = Math.random()*10;
+    var dy = Math.random()*10;
+    ctx.translate(dx, dy);  
+  }
+  
+  function postShake() {
+    ctx = world.context;
+
+    ctx.restore();
+  }
+
 
 function updateWorld() {
     // Update
-    player.update(tutorial);
-    tutorial.update(player);
+    player.update(currentLevel);
+    currentLevel.update(player);
     world.camera.update();
     
     // Draw
+    if (shake) {
+        preShake();
+
+    }
     world.clear();
-    tutorial.draw(world.camera);
+    currentLevel.draw(world.camera);
     //blockingTile.draw(world.camera);
     player.draw(world.camera);
+    if (shake) {   
+        postShake();
+    }
+    
 }
 
 

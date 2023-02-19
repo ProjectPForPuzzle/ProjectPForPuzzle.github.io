@@ -48,6 +48,9 @@ function enemyComponent(x, y, width, height, color, speed) {
         if (colliding(this.x, this.y, this.width, this.height, target) && target.hitFrame == 0) {
             target.health--;
             target.hitFrame = 30;
+            target.hpText.text = "HP: " + target.health + "/3"
+            target.shakeFrames = 30;
+            shake = true;
             if (target.health <= 0) {
                 world.stop();
                 startGame()

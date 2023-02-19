@@ -39,8 +39,13 @@ function playerComponent(x, y, width, height, speed) {
     this.keysCollected = 0;
     this.holdingKey = false;
     this.finished = false;
+    this.hpText = new textComponent("60px", "Arial", "white", window.innerWidth / 2 - 30, 100);
+    this.hpText.text = "HP: 3/3";
+    this.shakeFrames = 0;
 
     this.update = function(maze) {
+        if (this.shakeFrames > 0) this.shakeFrames--;
+        else shake = false;
         this.animationFrame++;
         if (this.animationFrame > 49) this.animationFrame = 0;
         this.image = this.sprites[Math.floor(this.animationFrame / 10)];
@@ -112,6 +117,8 @@ function playerComponent(x, y, width, height, speed) {
         if (colliding(this.x, this.y, this.width, this.height, maze.exit)) {
             if (this.finished) {
                 world.stop();
+                levelNum++;
+                startGame("" + levelNum);
             }
         }
         
@@ -137,6 +144,7 @@ function playerComponent(x, y, width, height, speed) {
 
         } else ctx.drawImage(this.image, cameraPositionX, cameraPositionY, this.width, this.height);
         ctx.restore();
+        this.hpText.draw();
         //ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }
