@@ -10,7 +10,6 @@ let upDown = false;
 let downDown = false;
 
 function startGame() {
-    player = new playerComponent(50, 50, "red", 300, 300);
     tile = new tileComponent(25, "pink", 300, 100);
     player = new playerComponent(300, 300);
     monster = new enemyComponent();

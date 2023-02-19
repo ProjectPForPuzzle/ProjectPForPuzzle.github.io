@@ -1,11 +1,13 @@
-function tileComponent(size, color, x, y) {
+const tileType = { floor: 0, wall: 1 };
+
+function tileComponent(size, type, x, y) {
     this.size = size;
     this.color = color;
     this.x = x;
     this.y = y;
 
     this.draw = function() {
-        ctx = world.context;
+        ctx = world.cotypentext;
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.size, this.size);
     }
