@@ -1,9 +1,18 @@
 const tileSize = 80;
 
+const cobbleImage = new Image();
+cobbleImage.src = "Walls.png";
+
+const floorImage = new Image();
+floorImage.src = "Floor.png";
+
+
+
 function tileComponent(type, x, y) {
     this.width = tileSize;
     this.height = tileSize;
     this.type = type;
+    this.image = new Image();
     this.x = x;
     this.y = y;
 
@@ -13,14 +22,23 @@ function tileComponent(type, x, y) {
 
         ctx = world.context;
 
-        ctx.fillStyle = this.type;
+        if (this.type == "Floor.png") {
+            ctx.drawImage(floorImage, cameraPositionX, cameraPositionY, this.width, this.height);
+        } else if (this.type == "Walls.png") {
+            ctx.drawImage(cobbleImage, cameraPositionX, cameraPositionY, this.width, this.height);
+        } else {
+            ctx.fillStyle = this.type;
 
-        ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
+
+            ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
+        }
+
+        
     }
 }
 
 
-const tType = { "f": "#212121", "w": "#FFFFFF", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
+const tType = { "f": "Floor.png", "w": "Walls.png", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
 function Maze(mazeData, rows, enemies, keys) {
     this.data = mazeData;
     this.rows = rows;
