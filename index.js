@@ -15,8 +15,6 @@ function startGame() {
     let tutorialMazeData = ""; //ARYA ADD THE MAZE HERE
     let tutorial = new Maze(tutorialMazeData, 40, 1, 1);
 
-    monster = new enemyComponent();
-
     world.camera = new camera(300, 300);
     world.camera.follow(player);
 
@@ -46,95 +44,20 @@ var world = {
     }
 }
 
-let testText = new textComponent("30px", "Consolas", "red", 100, 100);
-testText.text = "Time: 0";
-
-let counter = 0;
 
 function updateWorld() {
     // Update
-    player.update(maze1);
-    monster.update(maze1, player);
+    player.update(tutorial);
     world.camera.update();
-  
-    counter++;
-    testText.text = "Time: " + parseInt(counter / 50) + "s";
     
     // Draw
     world.clear();
-    maze1.draw(world.camera);
+    tutorial.draw(world.camera);
 
     player.draw(world.camera);
-    monster.draw(world.camera);
-    testText.draw();
-    tile.draw();
 }
 
-function textComponent(fontSize, fontName, color, x, y) {
-    this.fontSize = fontSize;
-    this.fontName = fontName;
-    this.color = color;
-    this.x = x;
-    this.y = y;
 
-    this.draw = function() {
-        ctx = world.context;
-        ctx.font = this.fontSize + " " + this.fontName;
-        ctx.fillStyle = this.color;
-        ctx.fillText(this.text, this.x, this.y);
-    }
-}
-
-function colliding(entity1x, entity1y, entity1w, entity1h, entity2) {
-    if (entity1x + entity1w > entity2.x && entity1x < entity2.x + entity2.width && entity1y + entity1h > entity2.y && entity1y < entity2.y + entity2.height) return true;
-    else return false;
-}
-
-function intoWall(oldX, oldY, newX, newY, width, height, wall) {
-    let ret = new Array();
-    ret[0] = newX;
-    ret[1] = newY;
-
-    let newLeft = newX;
-    let newRight = newX + width;
-    let newTop = newY;
-    let newBottom = newY + height;
-
-    let oldLeft = oldX;
-    let oldRight = oldX + width;
-    let oldTop = oldY;
-    let oldBottom = oldY + height;
-
-    
-    if (newBottom > wall.y && newTop < wall.y + wall.height && newLeft != oldLeft) {
-        //push left
-        console.log(oldX + width, newX + width, wall.x);
-        if (oldRight < wall.x && newRight > wall.x) {
-            console.log("push left");
-
-            ret[0] = wall.x - wall.width;
-        }
-
-        //push right
-        else if (oldLeft > wall.x + wall.width && newLeft < wall.x + wall.width) {
-            ret[0] = wall.x + wall.width;
-        }
-    }
-
-    if (newRight > wall.x && newLeft < wall.x + wall.width) {
-        //push up
-        if (oldBottom < wall.y && newBottom > wall.y) {
-            ret[1] = wall.y - wall.height;
-        }
-
-        //push down
-        else if (oldTop > wall.Y + wall.height && newTop < wall.y + wall.height) {
-            ret[1] = wall.y + wall.height;
-        }
-    }
-
-    return ret;
-}
 
 function keyDownHandler(event) {
     if (event.keyCode === inputKey.right) {
