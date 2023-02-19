@@ -2,6 +2,7 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 var player;
+var monster;
 
 let rightDown = false;
 let leftDown = false;
@@ -11,6 +12,11 @@ let downDown = false;
 function startGame() {
     player = new playerComponent(50, 50, "red", 300, 300);
     tile = new tileComponent(25, "pink", 300, 100);
+    player = new playerComponent(300, 300);
+    monster = new enemyComponent();
+    world.camera = new camera(300, 300, window.innerWidth, window.innerHeight, 3000, 3000);
+    world.camera.follow(player);
+
     world.start();
 }
 
@@ -45,13 +51,16 @@ let counter = 0;
 function updateWorld() {
     // Update
     player.update();
+    monster.update(player);
+    world.camera.update();
   
     counter++;
     testText.text = "Time: " + parseInt(counter / 50) + "s";
     
     // Draw
     world.clear();
-    player.draw();
+    player.draw(world.camera);
+    monster.draw(world.camera);
     testText.draw();
     tile.draw();
 }
@@ -69,6 +78,11 @@ function textComponent(fontSize, fontName, color, x, y) {
         ctx.fillStyle = this.color;
         ctx.fillText(this.text, this.x, this.y);
     }
+}
+
+function colliding(entity1, entity2) {
+    if (entity1.x + entity1.width > entity2.x && entity1.x < entity2.x + entity2.width && entity1.y + entity1.height > entity2.y && entity1.y < entity2.y + entity2.height) return true;
+    else return false;
 }
 
 function keyDownHandler(event) {
