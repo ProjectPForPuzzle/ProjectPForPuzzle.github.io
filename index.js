@@ -1,8 +1,6 @@
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
-//const tileType = { floor: "#212121", wall: "#FFFFFF", translator: "#F3F322" };
-
 var player;
 var monster;
 

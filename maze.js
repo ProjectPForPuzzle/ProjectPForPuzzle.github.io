@@ -19,7 +19,7 @@ function tileComponent(type, x, y) {
 }
 //
 
-const type = { "f": "#212121", "w": "#FFFFFF", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB"};
+const tType = { "f": "#212121", "w": "#FFFFFF", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB"};
 function Maze(mazeData, rows, enemies, keys) {
     this.data = mazeData;
     this.rows = rows;
@@ -28,14 +28,19 @@ function Maze(mazeData, rows, enemies, keys) {
 
     this.tileNum = rows * rows;
     this.tileSet = new Array();
+    this.enemies = new Array();
+    this.enemiesNum = 0;
 
     for (i = 0; i < this.tileNum; i++) {
-        let type = this.data[i];
+        let type = tType[this.data[i]];
         
         var xPos = i % this.rows;
         var yPos = Math.floor(i / this.rows);
 
         this.tileSet[i] = new tileComponent(type, xPos * tileSize, yPos * tileSize)
+        if (tType[this.data[i]] == "e") {
+            this.enemies[this.enemiesNum] = new enemyComponent(xPos * tileSize, yPos * tileSize, 50, 50);
+        }
     }
 
     this.draw = function(camera) {
