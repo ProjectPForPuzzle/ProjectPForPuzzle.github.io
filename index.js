@@ -48,6 +48,7 @@ var world = {
 function updateWorld() {
     // Update
     player.update(tutorial);
+    tutorial.update(player);
     world.camera.update();
     
     // Draw

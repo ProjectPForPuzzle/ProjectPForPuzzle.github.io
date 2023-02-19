@@ -17,7 +17,7 @@ function tileComponent(type, x, y) {
         ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }
-//
+
 
 const tType = { "f": "#212121", "w": "#FFFFFF", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB"};
 function Maze(mazeData, rows, enemies, keys) {
@@ -40,6 +40,12 @@ function Maze(mazeData, rows, enemies, keys) {
         this.tileSet[i] = new tileComponent(type, xPos * tileSize, yPos * tileSize)
         if (tType[this.data[i]] == "e") {
             this.enemies[this.enemiesNum] = new enemyComponent(xPos * tileSize, yPos * tileSize, 50, 50);
+        }
+    }
+
+    this.update = function(target) {
+        for (let i = 0; i < this.enemiesNum; i++) {
+            this.enemies[this.enemiesNum].update(target);
         }
     }
 
