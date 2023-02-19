@@ -80,8 +80,10 @@ function enemyComponent(x, y, width, height, color, speed) {
         }
 
         if (colliding(this.x, this.y, this.width, this.height, target)) {
-            //alert("you dead bitch");
-            //world.stop();
+            target.health--;
+            if (target.health <= 0) {
+                
+            }
         }
     }
 

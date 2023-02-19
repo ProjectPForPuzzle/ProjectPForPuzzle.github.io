@@ -11,6 +11,7 @@ function playerComponent(x, y, width, height, color, speed) {
     this.dirX = 0;
     this.dirY = 0;
     this.speed = speed || 6;
+    this.health = 3;
 
     this.update = function(maze) {
         this.dirX = 0;
