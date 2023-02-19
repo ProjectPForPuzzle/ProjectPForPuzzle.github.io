@@ -11,7 +11,7 @@ function playerComponent(x, y, width, height, color, speed) {
     this.dirY = 0;
     this.speed = speed || 6;
 
-    this.update = function() {
+    this.update = function(maze) {
         this.dirX = 0;
         if (rightDown) this.dirX++;
         if (leftDown) this.dirX--;
@@ -20,8 +20,27 @@ function playerComponent(x, y, width, height, color, speed) {
         if (downDown) this.dirY++;
         if (upDown) this.dirY--;
 
-        this.x += this.dirX * this.speed;
-        this.y += this.dirY * this.speed;
+        let targetX = this.x + this.dirX * this.speed;
+        let targetY = this.y + this.dirY * this.speed;
+        
+        if (targetX != this.x || targetY != this.y) {
+            for (let i = 0; i < maze.num_tiles; i++) {
+                if (maze.tileSet[i].type == 1) {
+                    if (colliding(targetX, targetY, this.width, this.height, maze.tileSet[i])) {
+                        let ret = intoWall(this.x, this.y, targetX, targetY, this.width, this.height, maze.tileSet[i]);
+                        targetX = ret[0];
+                        targetY = ret[1];
+                    }
+                    
+                }
+                
+            }
+            
+        }
+
+        this.x = targetX;
+        this.y = targetY;
+        
     }
 
     this.draw = function(camera) {

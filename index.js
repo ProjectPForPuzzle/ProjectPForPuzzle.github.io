@@ -10,10 +10,11 @@ let upDown = false;
 let downDown = false;
 
 function startGame() {
-    tile = new tileComponent(25, "pink", 300, 100);
-    player = new playerComponent(300, 300);
+    maze1 = new Maze(10);
+
+    player = new playerComponent(1000, 1000);
     monster = new enemyComponent();
-    world.camera = new camera(300, 300, window.innerWidth, window.innerHeight, 3000, 3000);
+    world.camera = new camera(1000, 1000, window.innerWidth, window.innerHeight, 3000, 3000);
     world.camera.follow(player);
 
     world.start();
@@ -49,7 +50,7 @@ let counter = 0;
 
 function updateWorld() {
     // Update
-    player.update();
+    player.update(maze1);
     monster.update(player);
     world.camera.update();
   
@@ -58,10 +59,12 @@ function updateWorld() {
     
     // Draw
     world.clear();
+    maze1.draw(world.camera);
+
     player.draw(world.camera);
     monster.draw(world.camera);
     testText.draw();
-    tile.draw();
+
 }
 
 function textComponent(fontSize, fontName, color, x, y) {
@@ -79,9 +82,55 @@ function textComponent(fontSize, fontName, color, x, y) {
     }
 }
 
-function colliding(entity1, entity2) {
-    if (entity1.x + entity1.width > entity2.x && entity1.x < entity2.x + entity2.width && entity1.y + entity1.height > entity2.y && entity1.y < entity2.y + entity2.height) return true;
+function colliding(entity1x, entity1y, entity1w, entity1h, entity2) {
+    if (entity1x + entity1w > entity2.x && entity1x < entity2.x + entity2.width && entity1y + entity1h > entity2.y && entity1y < entity2.y + entity2.height) return true;
     else return false;
+}
+
+function intoWall(oldX, oldY, newX, newY, width, height, wall) {
+    let ret = new Array();
+    ret[0] = newX;
+    ret[1] = newY;
+
+    let newLeft = newX;
+    let newRight = newX + width;
+    let newTop = newY;
+    let newBottom = newY + height;
+
+    let oldLeft = oldX;
+    let oldRight = oldX + width;
+    let oldTop = oldY;
+    let oldBottom = oldY + height;
+
+    
+    if (newBottom > wall.y && newTop < wall.y + wall.height && newLeft != oldLeft) {
+        //push left
+        console.log(oldRight, newRight, wall.x);
+        if (oldRight < wall.x && newRight > wall.x) {
+            console.log("push left");
+
+            ret[0] = wall.x - wall.width;
+        }
+
+        //push right
+        else if (oldLeft > wall.x + wall.width && newLeft < wall.x + wall.width) {
+            ret[0] = wall.x + wall.width;
+        }
+    }
+
+    if (newRight > wall.x && newLeft < wall.x + wall.width) {
+        //push up
+        if (oldBottom < wall.y && newBottom > wall.y) {
+            ret[1] = wall.y - wall.height;
+        }
+
+        //push down
+        else if (oldTop > wall.Y + wall.height && newTop < wall.y + wall.height) {
+            ret[1] = wall.y + wall.height;
+        }
+    }
+
+    return ret;
 }
 
 function keyDownHandler(event) {

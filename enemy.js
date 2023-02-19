@@ -47,13 +47,13 @@ function enemyComponent(x, y, width, height, color, speed) {
         }
 
         if (this.state == state.changingDirection) {
-            console.log("bruh");
 
             this.turnFrame--;
 
             if (this.turnFrame <= 0) {
                 this.dir = this.targetDir
                 this.turnFrame = 0;
+                this.moveFrame = 0;
                 this.state = state.moving;
             }
         }
@@ -70,13 +70,15 @@ function enemyComponent(x, y, width, height, color, speed) {
             let xDist = Math.abs(this.x - target.x);
             let yDist = Math.abs(this.y - target.y);
 
-            if ((this.x == this.lastTargetX && this.dir % 2 == 0) || (this.y == this.lastTargetY && this.dir % 2 != 0))
+            let xFound = ((this.x >= this.lastTargetX && this.dir == compass.east) || (this.x <= this.lastTargetX && this.dir == compass.west));
+            let yFound = ((this.y >= this.lastTargetY && this.dir == compass.south) || (this.y <= this.lastTargetY && this.dir == compass.north));
+            if (xFound || yFound || this.moveFrame > 300)
                 this.state = state.updatingTarget;
         }
 
-        if (colliding(this, target)) {
-            alert("you dead bitch");
-            world.stop();
+        if (colliding(this.x, this.y, this.width, this.height, target)) {
+            //alert("you dead bitch");
+            //world.stop();
         }
     }
 

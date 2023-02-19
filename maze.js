@@ -1,42 +1,53 @@
 const tileType = { floor: 0, wall: 1 };
+const tileSize = 80;
 
-function tileComponent(size, type, x, y) {
-    this.size = size;
-    this.color = color;
+function tileComponent(type, x, y) {
+    this.width = tileSize;
+    this.height = tileSize;
+    this.type = type;
     this.x = x;
     this.y = y;
 
-    this.draw = function() {
-        ctx = world.cotypentext;
+    this.color = "#212121";
+    if (this.type == tileType.wall) this.color = "#FFFFFF";
+
+    this.draw = function(camera) {
+        let cameraPositionX = camera.width / 2 + (this.x - camera.x);
+        let cameraPositionY = camera.height / 2 + (this.y - camera.y);
+
+        ctx = world.context;
+
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.size, this.size);
+        ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }
 
 // Maze is a size x size square of tiles
-function Maze(size) {
+function Maze(rows) {
 
-    this.size = size;
+    this.rows = rows;
 
     // number of tiles in the maze
-    num_tiles = size ** 2;
+    this.num_tiles = this.rows * this.rows;
 
-    this.tiles = new Array(num_tiles);
+    this.tileSet = new Array(this.num_tiles);
 
-    // size of each tile
-    t_size = (window.innerHeight - 40) / size;
 
-    // starting position for the tiles
-    start_x = (maze.innerWidth / 2) - ( (window.innerHeight - 40) / 2 );
-    start_y = window.innerHeight - 20;
+    for (i = 0; i < this.num_tiles; i++) {
+        let type = tileType.floor;
 
-    for (i = 0; i < num_tiles; i++) {
-        if ( start_y <= 20) {
-            start_x += t_size;
-            start_y = window.innerHeight - 20;
+        var xPos = i % rows;
+        var yPos = Math.floor(i / rows);
+
+        if (xPos % 2 == 0) type = tileType.wall;
+
+        this.tileSet[i] = new tileComponent(type, xPos * tileSize, yPos * tileSize);
+    }
+
+    this.draw = function(camera) {
+        for (i = 0; i < this.num_tiles; i++) {
+            this.tileSet[i].draw(camera);
         }
-        tiles[i] = new tileComponent(t_size, start_x, start_y);
-        start_y -= t_size;
     }
 
 }
