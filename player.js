@@ -123,6 +123,7 @@ function playerComponent(x, y, width, height, speed) {
                 world.stop();
                 levelNum++;
                 startGame("" + levelNum);
+                mySound.stop();
             }
         }
         
