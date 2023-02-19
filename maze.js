@@ -1,7 +1,7 @@
 const tileSize = 80;
 
 const cobbleImage = new Image();
-cobbleImage.src = "Walls.png";
+cobbleImage.src = "walls2.png";
 
 const floorImage = new Image();
 floorImage.src = "Floor.png";
@@ -23,8 +23,10 @@ function tileComponent(type, x, y) {
         ctx = world.context;
 
         if (this.type == "Floor.png") {
+            ctx.imageSmoothingQuality = "high";
             ctx.drawImage(floorImage, cameraPositionX, cameraPositionY, this.width, this.height);
-        } else if (this.type == "Walls.png") {
+        } else if (this.type == "walls2.png") {
+            ctx.imageSmoothingQuality = "high";
             ctx.drawImage(cobbleImage, cameraPositionX, cameraPositionY, this.width, this.height);
         } else {
             ctx.fillStyle = this.type;
@@ -38,7 +40,7 @@ function tileComponent(type, x, y) {
 }
 
 
-const tType = { "f": "Floor.png", "w": "Walls.png", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
+const tType = { "f": "Floor.png", "w": "walls2.png", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
 function Maze(mazeData, rows, enemies, keys) {
     this.data = mazeData;
     this.rows = rows;
@@ -52,6 +54,9 @@ function Maze(mazeData, rows, enemies, keys) {
     this.tileSet = new Array();
     this.enemySet = new Array();
     this.enemiesI = 0;
+    this.translator = null;
+    this.keyList = new Array();
+    this.keyIter = 0;
 
     for (i = 0; i < this.tileNum; i++) {
         let type = tType[this.data[i]];
@@ -67,10 +72,19 @@ function Maze(mazeData, rows, enemies, keys) {
             this.startPosY = yPos * tileSize + 5;
         }
 
-        if (tType[this.data[i]] == "#73F411") {
+        else if (tType[this.data[i]] == "#73F411") {
             
             this.enemySet[this.enemiesI] = new enemyComponent(xPos * tileSize, yPos * tileSize);
             this.enemiesI++;
+        }
+
+        else if (tType[this.data[i]] == "#F3F322") {
+            this.translator = new translator(xPos * tileSize, yPos * tileSize);
+        }
+
+        else if (tType[this.data[i]] == "#FFC0CB") {
+            this.keyList[this.  keyIter] = new key(xPos * tileSize, yPos * tileSize);
+            this.keyIter++;
         }
     }
 

@@ -1,21 +1,34 @@
 const inputKey = { left: 37, up: 38, right: 39, down: 40 };
-tType = { "f": "#212121", "w": "#FFFFFF", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
+tType = { "f": "Floor.png", "w": "walls2.png", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
 
+const spriteOne = new Image();
+spriteOne.src = "one.png";
+
+const spriteTwo = new Image();
+spriteTwo.src = "two.png";
+
+const spriteThree = new Image();
+spriteThree.src = "three.png";
+
+const spriteFour = new Image();
+spriteFour.src = "four.png";
+
+const spriteFive = new Image();
+spriteFive.src = "five.png";
 
 function playerComponent(x, y, width, height, speed) {
     this.x = x || 0;
     this.y = y || 0;
     this.width = width || 50;
     this.height = height || 50;
-    this.image = new Image();
+    this.image = spriteOne;
     
     this.sprites = new Array();
-    this.sprites[0] = "one.png";
-    this.sprites[1] = "one.png";
-    this.sprites[2] = "one.png";
-    this.sprites[3] = "one.png";
-    this.sprites[4] = "one.png";
-    this.image.src = this.sprites[0];
+    this.sprites[0] = spriteOne;
+    this.sprites[1] = spriteTwo;
+    this.sprites[2] = spriteThree;
+    this.sprites[3] = spriteFour;
+    this.sprites[4] = spriteFive;
     this.dirX = 0;
     this.dirY = 0;
     this.speed = speed || 6;
@@ -27,7 +40,7 @@ function playerComponent(x, y, width, height, speed) {
     this.update = function(maze) {
         this.animationFrame++;
         if (this.animationFrame > 49) this.animationFrame = 0;
-        this.image.src = this.sprites[Math.floor(this.animationFrame / 10)];
+        this.image = this.sprites[Math.floor(this.animationFrame / 10)];
         //console.log(Math.floor(this.animationFrame / 10));
         if (this.hitFrame > 0) this.hitFrame--;
         //if (this.hitFrame % 2 == 0) this.color = "green";
@@ -75,6 +88,16 @@ function playerComponent(x, y, width, height, speed) {
 
         this.x = updateX;
         this.y = updateY;
+
+        if (colliding(this.x, this.y, this.width, this.height, maze.translator)) {
+            console.log("update puzzle");
+        }
+        for (let i = 0; i < maze.keys; i++) {
+            if (colliding(this.x, this.y, this.width, this.height, maze.keyList[i])) {
+                console.log("collecting key");
+            }
+        }
+        
         
     }
 
@@ -91,7 +114,6 @@ function playerComponent(x, y, width, height, speed) {
 
         
         if (horizontal) {
-            console.log("yo")
             ctx.translate(cameraPositionX + this.width, cameraPositionY);
             ctx.scale(-1, 1);
             ctx.drawImage(this.image, 0, 0, this.width, this.height);
