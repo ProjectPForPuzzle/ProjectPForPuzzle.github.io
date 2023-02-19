@@ -10,6 +10,8 @@ function enemyComponent(x, y, width, height, color, speed) {
     this.speed = speed || 3;
 
     this.dir = compass.north;
+    this.dirX = 0;
+    this.dirY = 0;
     this.targetDir = compass.north;
 
     this.lastTargetX = x || 0;
@@ -18,66 +20,30 @@ function enemyComponent(x, y, width, height, color, speed) {
     this.moveFrame = 0;
     this.state = state.updatingTarget;
 
-    this.update = function(target) {
-        if (this.state == state.updatingTarget) {
-            this.lastTargetX = target.x;
-            this.lastTargetY = target.y;
+    this.update = function(target, maze) {
+        if (this.x - target.x > 5) this.dirX = -1;
+        else if (this.x - target.x < -5) this.dirX = 1;
+        else this.dirX = 0;
 
-            this.state = state.updatingDirection;
-        }
+        if (this.y - target.y > 5) this.dirY = -1;
+        else if (this.y - target.y < -5) this.dirY = 1;
+        else this.dirY = 0;
 
-        if (this.state == state.updatingDirection) {
-            let xDist = Math.abs(this.x - this.lastTargetX);
-            let yDist = Math.abs(this.y - this.lastTargetY);
-
-            if (xDist > yDist) {
-                if (this.x > this.lastTargetX) this.targetDir = compass.west;
-                else this.targetDir = compass.east;
-
-
-            } else {
-                if (this.y > this.lastTargetY) this.targetDir = compass.north;
-                else this.targetDir = compass.south;
+        this.speed = 5;
+        for (let i = 0; i < maze.tileNum; i++) {
+            if (maze.tileSet[i].type === tType["w"]) {
+                
+                if (colliding(this.x, this.y, this.width, this.height, maze.tileSet[i])) {
+                    this.speed = 3;
+                }
+                
             }
-
-            if (this.targetDir != this.dir) this.turnFrame = 10;
-
-
-            this.state = state.changingDirection;
+            
         }
 
-        if (this.state == state.changingDirection) {
-
-            this.turnFrame--;
-
-            if (this.turnFrame <= 0) {
-                this.dir = this.targetDir
-                this.turnFrame = 0;
-                this.moveFrame = 0;
-                this.state = state.moving;
-            }
-        }
-
-        if (this.state == state.moving) {
-            this.moveFrame++;
-
-            let targetX = this.x;
-            let targetY = this.y;
-
-            if (this.dir == compass.south) this.y = this.y + this.speed;
-            else if (this.dir == compass.north) this.y = this.y - this.speed;
-            else if (this.dir == compass.east) this.x  = this.x + this.speed;
-            else if (this.dir == compass.west) this.x  -= this.x - this.speed;
+        this.y += this.dirY * this.speed;
+        this.x += this.dirX * this.speed;
         
-
-            let xDist = Math.abs(this.x - target.x);
-            let yDist = Math.abs(this.y - target.y);
-
-            let xFound = ((this.x >= this.lastTargetX && this.dir == compass.east) || (this.x <= this.lastTargetX && this.dir == compass.west));
-            let yFound = ((this.y >= this.lastTargetY && this.dir == compass.south) || (this.y <= this.lastTargetY && this.dir == compass.north));
-            if (xFound || yFound || this.moveFrame > 300)
-                this.state = state.updatingTarget;
-        }
 
         if (colliding(this.x, this.y, this.width, this.height, target) && target.hitFrame == 0) {
             target.health--;
@@ -96,36 +62,5 @@ function enemyComponent(x, y, width, height, color, speed) {
         ctx = world.context;
         ctx.fillStyle = this.color;
         ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
-
-        ctx.save()
-
-        ctx.strokeStyle = "purple";
-        ctx.translate(cameraPositionX + this.width / 2, cameraPositionY + this.height / 2);
-
-        let degree = (this.dir - 1) * 90;
-        let targetDegree = (this.targetDir - 1) * 90;
-
-        if ((targetDegree > degree || (targetDegree == 0 && degree == 270)) && !(targetDegree == 270 && degree == 0)) degree += 9 * (10 - this.turnFrame);
-
-        else if (targetDegree < degree || (targetDegree == 270 && degree == 0)) degree -= 9 * (10 - this.turnFrame);
-
-        ctx.rotate((degree * Math.PI) / 180);
-        ctx.beginPath();
-
-        ctx.moveTo(-this.width / 2, -this.height / 2);
-        ctx.lineTo(-this.width / 2 - 25, -this.height / 2 - 50);
-        ctx.lineTo(this.width / 2 + 25, -this.height / 2 - 50);
-        ctx.lineTo(this.width / 2, -this.height / 2);
-
-        ctx.closePath();
-        ctx.stroke();
-        ctx.restore();
-
-
-        let targetCameraX = camera.width / 2 + (this.lastTargetX - camera.x);
-        let targetCameraY = camera.height / 2 + (this.lastTargetY - camera.y);
-
-        ctx.fillStyle = "green";
-        ctx.fillRect(targetCameraX, targetCameraY, 5, 5);
     }
 }

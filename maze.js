@@ -41,7 +41,7 @@ function Maze(mazeData, rows, enemies, keys) {
         var xPos = i % this.rows;
         var yPos = Math.floor(i / this.rows);
 
-        this.tileSet[i] = new tileComponent(type, xPos * tileSize, yPos * tileSize);
+        this.tileSet[i] = new tileComponent(type, xPos * (tileSize - 1), yPos * tileSize);
 
         if (tType[this.data[i]] == "#FF00FF") {
             
@@ -58,7 +58,7 @@ function Maze(mazeData, rows, enemies, keys) {
 
     this.update = function(target) {
         for (let i = 0; i < this.enemiesNum; i++) {
-            this.enemySet[i].update(target);
+            this.enemySet[i].update(target, this);
         }
     }
 
