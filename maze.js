@@ -104,5 +104,7 @@ function Maze(rows) {
         }
     }
 
+    }
+
 }
 
