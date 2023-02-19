@@ -12,11 +12,11 @@ let upDown = false;
 let downDown = false;
 
 function startGame() {
-    maze1 = new Maze(22);
-
-    player = new playerComponent(maze1.startTile.x + 5, maze1.startTile.y + 5);
-    monster = new enemyComponent(1200, 1200);
-    world.camera = new camera(1000, 1000);
+    player = new playerComponent(50, 50, "red", 300, 300);
+    tile = new tileComponent(25, "pink", 300, 100);
+    player = new playerComponent(300, 300);
+    monster = new enemyComponent();
+    world.camera = new camera(300, 300, window.innerWidth, window.innerHeight, 3000, 3000);
     world.camera.follow(player);
 
     world.start();
@@ -66,7 +66,7 @@ function updateWorld() {
     player.draw(world.camera);
     monster.draw(world.camera);
     testText.draw();
-
+    tile.draw();
 }
 
 function textComponent(fontSize, fontName, color, x, y) {

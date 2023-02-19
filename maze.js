@@ -17,6 +17,7 @@ function tileComponent(type, x, y) {
         ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }
+//
 
 const type = { "f": "#212121", "w": "#FFFFFF", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB"};
 function Maze(mazeData, rows, enemies, keys) {
