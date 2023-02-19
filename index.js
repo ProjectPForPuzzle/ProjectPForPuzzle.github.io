@@ -16,7 +16,7 @@ function startGame() {
 
     player = new playerComponent(maze1.startTile.x + 5, maze1.startTile.y + 5);
     monster = new enemyComponent(1200, 1200);
-    world.camera = new camera(1000, 1000, window.innerWidth, window.innerHeight, 3000, 3000);
+    world.camera = new camera(1000, 1000);
     world.camera.follow(player);
 
     world.start();
