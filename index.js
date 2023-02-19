@@ -10,6 +10,7 @@ let downDown = false;
 
 function startGame() {
     player = new playerComponent(50, 50, "red", 300, 300);
+    tile = new tileComponent(250, "pink", 500, 500, 200, 200);
     world.start();
 }
 
@@ -52,6 +53,7 @@ function updateWorld() {
     world.clear();
     player.draw();
     testText.draw();
+    tile.draw();
 }
 
 function textComponent(fontSize, fontName, color, x, y) {
