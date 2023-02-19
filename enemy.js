@@ -18,7 +18,7 @@ function enemyComponent(x, y, width, height, color, speed) {
     this.moveFrame = 0;
     this.state = state.updatingTarget;
 
-    this.update = function(maze, target) {
+    this.update = function(target) {
         if (this.state == state.updatingTarget) {
             this.lastTargetX = target.x;
             this.lastTargetY = target.y;
