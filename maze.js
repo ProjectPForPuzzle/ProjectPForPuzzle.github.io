@@ -15,9 +15,6 @@ function tileComponent(type, x, y) {
 
         ctx.fillStyle = this.type;
 
-        console.log("hello");
-
-
         ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }
@@ -29,6 +26,9 @@ function Maze(mazeData, rows, enemies, keys) {
     this.rows = rows;
     this.enemiesNum = enemies;
     this.keys = keys;
+    this.first = true;
+    this.startPosX = 0;
+    this.startPosY = 0;
 
     this.tileNum = rows * rows;
     this.tileSet = new Array();
@@ -42,6 +42,12 @@ function Maze(mazeData, rows, enemies, keys) {
         var yPos = Math.floor(i / this.rows);
 
         this.tileSet[i] = new tileComponent(type, xPos * tileSize, yPos * tileSize);
+
+        if (tType[this.data[i]] == "#FF00FF") {
+            
+            this.startPosX = xPos * tileSize + 5;
+            this.startPosY = yPos * tileSize + 5;
+        }
 
         if (tType[this.data[i]] == "#73F411") {
             
@@ -60,8 +66,9 @@ function Maze(mazeData, rows, enemies, keys) {
         for (i = 0; i < this.tileNum; i++) {
             this.tileSet[i].draw(camera);
         }
+        
         for (let i = 0; i < this.enemiesNum; i++) {
-            this.enemies[i].draw(camera);
+            this.enemySet[i].draw(camera);
         }
     }
 }
