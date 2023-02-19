@@ -75,7 +75,7 @@ function Maze(mazeData, rows, enemies, keys) {
 
         else if (tType[this.data[i]] == "#73F411") {
             
-            this.enemySet[this.enemiesI] = new enemyComponent(xPos * tileSize, yPos * tileSize);
+            this.enemySet[this.enemiesI] = new enemyComponent(xPos * tileSize, yPos * tileSize, 100, 100);
             this.enemiesI++;
         }
 
@@ -84,7 +84,7 @@ function Maze(mazeData, rows, enemies, keys) {
         }
 
         else if (tType[this.data[i]] == "#FFC0CB") {
-            this.keyList[this.  keyIter] = new key(xPos * tileSize, yPos * tileSize);
+            this.keyList[this.keyIter] = new key(xPos * tileSize, yPos * tileSize);
             this.keyIter++;
         }
 

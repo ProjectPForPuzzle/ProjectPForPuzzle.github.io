@@ -13,6 +13,7 @@ function enemyComponent(x, y, width, height, color, speed) {
     this.dirX = 0;
     this.dirY = 0;
     this.targetDir = compass.north;
+    this.facingLeft = false;
 
     this.lastTargetX = x || 0;
     this.lastTargetY = y || 0;
@@ -20,9 +21,18 @@ function enemyComponent(x, y, width, height, color, speed) {
     this.moveFrame = 0;
     this.state = state.updatingTarget;
 
+    this.image = new Image();
+    this.image.src = "Enemy.png";
+
     this.update = function(target, maze) {
-        if (this.x - target.x > 5) this.dirX = -1;
-        else if (this.x - target.x < -5) this.dirX = 1;
+        if (this.x - target.x > 5) {
+            this.facingLeft = true;
+            this.dirX = -1;
+        }
+        else if (this.x - target.x < -5) {
+            this.dirX = 1;
+            this.facingLeft = false;
+        }
         else this.dirX = 0;
 
         if (this.y - target.y > 5) this.dirY = -1;
@@ -53,7 +63,7 @@ function enemyComponent(x, y, width, height, color, speed) {
             shake = true;
             if (target.health <= 0) {
                 world.stop();
-                startGame()
+                window.location.href = 'index.html';
             }
         }
     }
@@ -63,7 +73,16 @@ function enemyComponent(x, y, width, height, color, speed) {
         let cameraPositionY = camera.height / 2 + (this.y - camera.y);
 
         ctx = world.context;
-        ctx.fillStyle = this.color;
-        ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
+        ctx.save();  
+        let horizontal = !this.facingLeft;
+
+        
+        if (horizontal) {
+            ctx.translate(cameraPositionX + this.width, cameraPositionY);
+            ctx.scale(-1, 1);
+            ctx.drawImage(this.image, 0, 0, this.width, this.height);
+
+        } else ctx.drawImage(this.image, cameraPositionX, cameraPositionY, this.width, this.height);
+        ctx.restore();
     }
 }

@@ -41,9 +41,13 @@ function playerComponent(x, y, width, height, speed) {
     this.finished = false;
     this.hpText = new textComponent("60px", "Arial", "white", window.innerWidth / 2 - 30, 100);
     this.hpText.text = "HP: 3/3";
+    this.carryingKeyText = new textComponent("30px", "Arial", "white", window.innerWidth / 2 - 100, 150);
+    this.carryingKeyText.text = "";
     this.shakeFrames = 0;
 
     this.update = function(maze) {
+        if (this.holdingKey) this.carryingKeyText.text = "Carrying key: cannot carry more"
+        else this.carryingKeyText.text = ""
         if (this.shakeFrames > 0) this.shakeFrames--;
         else shake = false;
         this.animationFrame++;
@@ -145,6 +149,7 @@ function playerComponent(x, y, width, height, speed) {
         } else ctx.drawImage(this.image, cameraPositionX, cameraPositionY, this.width, this.height);
         ctx.restore();
         this.hpText.draw();
+        this.carryingKeyText.draw();
         //ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }
