@@ -1,47 +1,108 @@
-function tileComponent(size, color, x, y) {
-    this.size = size;
-    this.color = color;
+const tileType = { floor: "#212121", wall: "#FFFFFF", translator: "#F3F322", spawner: "#73F411", start: "#FF00FF", key: "#FFC0CB" };
+const tileSize = 80;
+
+function tileComponent(type, x, y) {
+    this.width = tileSize;
+    this.height = tileSize;
+    this.type = type;
     this.x = x;
     this.y = y;
 
-    this.draw = function() {
+    this.draw = function(camera) {
+        let cameraPositionX = camera.width / 2 + (this.x - camera.x);
+        let cameraPositionY = camera.height / 2 + (this.y - camera.y);
+
         ctx = world.context;
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.size, this.size);
+
+        ctx.fillStyle = this.type;
+        ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }
+
+const mazeSet1 = "ffffwffffffwwwwffwfwfffwfffwwwwwfffffwfffwwwfwfwwffffffwfffffwwwfwwwwfffwfffwfffwwwfwwwwwffffffwffff";
+const mazeSet2 = "ffwfffffffwfwfwfwwfwffffwffwffwwwffffwwfffwwwfwwffwffffffwfwwwfwwwfwfwfwffwffwfffwfwwfwwwffffwffffff";
+const mazeSet3 = "fffffwfffffwfwwwwfwffwffffffwwwwwfwwwfwffwfffwfffffffwfwfwfwfwwwwwfwffffwfwffwwwwfwfwfwwwfffffffffff";
+const mazeSet4 = "wwffffwwwfwffwffffwfffwwfwwfwfwffwfwffffwfwwwwfwwfwfwfwfffwwffffffwffffwwwfwwfwffwfwfwffwwfffwfwwfff";
 
 // Maze is a size x size square of tiles
-function Maze(size) {
+function Maze(rows) {
 
-    this.size = size;
+    this.rows = rows;
 
     // number of tiles in the maze
-    num_tiles = size ** 2;
+    this.num_tiles = this.rows * this.rows;
 
-    this.tiles = new Array(num_tiles);
+    this.tileSet = new Array(this.num_tiles);
+
+    this.oneIter = 0;
+    this.twoIter = 0;
+    this.threeIter = 0;
+    this.fourIter = 0;
+
+
+    for (i = 0; i < this.num_tiles; i++) {
+        let type = tileType.floor;
+
+        var xPos = i % this.rows;
+        var yPos = Math.floor(i / this.rows);
+
+        if (xPos > 0 && xPos < 11 && yPos > 0 && yPos < 11) {
+            if (mazeSet1[this.oneIter] == "f") {
+                type = tileType.floor;
+            } else {
+                type = tileType.wall;
+            }
+            this.oneIter++;
+        }
+        if (xPos >= 11 && xPos < 21 && yPos > 0 && yPos < 11) {
+            if (mazeSet2[this.twoIter] == "f") {
+                type = tileType.floor;
+            } else {
+                type = tileType.wall;
+            }
+            this.twoIter++;
+        }
+
+        if (xPos > 0 && xPos < 11 && yPos >= 11 && yPos < 21) {
+            if (mazeSet3[this.threeIter] == "f") {
+                type = tileType.floor;
+            } else {
+                type = tileType.wall;
+            }
+            this.threeIter++;
+        }
+        if (xPos >= 11 && xPos < 21 && yPos >= 11 && yPos < 21) {
+            if (mazeSet4[this.fourIter] == "f") {
+                type = tileType.floor;
+            } else {
+                type = tileType.wall;
+            }
+            this.fourIter++;
+        }
+
+        if (xPos == 1 && yPos == 1) type = tileType.start;
+
+        if (xPos == 0 || xPos == this.rows - 1 || yPos == 0 || yPos == this.rows - 1) type = tileType.wall;
+
+        else if (xPos == (rows - 2) / 2 && yPos == (rows - 2) / 2) type = tileType.translator;
+
+        else if ((xPos == (rows - 2) / 4 || xPos == 3 * (rows - 2) / 4) && (yPos == (rows - 2) / 4 || yPos == 3 * (rows - 2) / 4)) type = tileType.spawner;
+
+        else if (((xPos - 3) % 5 == 0) && ((yPos - 3) % 5 == 0) && !((xPos == 8 && yPos == 8) || (xPos == 8 && yPos == 13) || (xPos == 13 && yPos == 8) || (xPos == 13 && yPos == 13))) type = tileType.key;
 
     // size of each tile
-    t_size = (window.innerHeight - 160) / size;
+    t_size = (window.innerHeight - 40) / size;
 
     // starting position for the tiles
-    start_x = (window.innerWidth / 2) - ( (window.innerHeight - 40) / 2 );
-    
-    start_y = 80;
+    start_x = (maze.innerWidth / 2) - ( (window.innerHeight - 40) / 2 );
+    start_y = window.innerHeight - 20;
 
     for (i = 0; i < num_tiles; i++) {
-        if ( start_y >= window.innerHeight - 80) {
+        if ( start_y <= 20) {
             start_x += t_size;
-            start_y = 80;
-        }
-        this.tiles[i] = new tileComponent(t_size, "pink", start_x, start_y);
-        start_y += t_size;
-    }
-
-    this.draw = function() {
-        for (i = 0; i < num_tiles; i++) {
-            this.tiles[i].draw();
+            start_y = window.innerHeight - 20;
         }
     }
 
 }
+
