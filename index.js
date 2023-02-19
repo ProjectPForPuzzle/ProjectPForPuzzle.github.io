@@ -11,7 +11,8 @@ let downDown = false;
 
 function startGame() {
     player = new playerComponent(50, 50, "red", 300, 300);
-    tile = new tileComponent(25, "pink", 300, 100);
+    //tile = new tileComponent(25, "pink", 300, 100);
+    maze = new Maze(25);
     player = new playerComponent(300, 300);
     monster = new enemyComponent();
     world.camera = new camera(300, 300, window.innerWidth, window.innerHeight, 3000, 3000);
@@ -62,7 +63,7 @@ function updateWorld() {
     player.draw(world.camera);
     monster.draw(world.camera);
     testText.draw();
-    tile.draw();
+    maze.draw();
 }
 
 function textComponent(fontSize, fontName, color, x, y) {

@@ -22,19 +22,26 @@ function Maze(size) {
     this.tiles = new Array(num_tiles);
 
     // size of each tile
-    t_size = (window.innerHeight - 40) / size;
+    t_size = (window.innerHeight - 160) / size;
 
     // starting position for the tiles
-    start_x = (maze.innerWidth / 2) - ( (window.innerHeight - 40) / 2 );
-    start_y = window.innerHeight - 20;
+    start_x = (window.innerWidth / 2) - ( (window.innerHeight - 40) / 2 );
+    
+    start_y = 80;
 
     for (i = 0; i < num_tiles; i++) {
-        if ( start_y <= 20) {
+        if ( start_y >= window.innerHeight - 80) {
             start_x += t_size;
-            start_y = window.innerHeight - 20;
+            start_y = 80;
         }
-        tiles[i] = new tileComponent(t_size, start_x, start_y);
-        start_y -= t_size;
+        this.tiles[i] = new tileComponent(t_size, "pink", start_x, start_y);
+        start_y += t_size;
+    }
+
+    this.draw = function() {
+        for (i = 0; i < num_tiles; i++) {
+            this.tiles[i].draw();
+        }
     }
 
 }
