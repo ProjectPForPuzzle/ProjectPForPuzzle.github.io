@@ -65,7 +65,7 @@ function enemyComponent(x, y, width, height, color, speed) {
                 if (score > highscore) highscore = score;
                 let playerDets = new PlayerDetails(username, highscore, 0, 0);
                 world.stop();
-                window.location.href = 'index.html';
+                window.location.href = 'youDied.html';
             }
         }
     }

@@ -45,8 +45,11 @@ function playerComponent(x, y, width, height, speed) {
     this.carryingKeyText.text = "";
     this.shakeFrames = 0;
     this.score = 0;
+    this.confettiTimer = 0;
 
     this.update = function(maze) {
+        if (this.confettiTimer > 0) this.confettiTimer--;
+        if (this.confettiTimer <= 0) $("#confetti").hide();
         if (this.holdingKey) this.carryingKeyText.text = "Carrying key: cannot carry more"
         else this.carryingKeyText.text = ""
         if (this.shakeFrames > 0) this.shakeFrames--;
@@ -104,6 +107,8 @@ function playerComponent(x, y, width, height, speed) {
 
         if (colliding(this.x, this.y, this.width, this.height, maze.translator)) {
             this.holdingKey = false;
+            $("#confetti").show();
+            this.confettiTimer = 100;
             if (this.keysCollected == maze.translator.keysNeeded) {
                 this.finished = true;
             }
@@ -121,6 +126,7 @@ function playerComponent(x, y, width, height, speed) {
 
         if (colliding(this.x, this.y, this.width, this.height, maze.exit)) {
             if (this.finished) {
+                $("#confetti").show();
                 score += 100 * this.health;
                 scoreText.text = "Score: " + score;
                 world.stop();

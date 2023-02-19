@@ -25,7 +25,7 @@ let maze2Data = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwkffffffffeffffffffffff
 const levelSelector = {"1": new Maze(tutorialMazeData, 40, 1, 1), "2": new Maze(maze1Data, 40, 1, 3), "3": new Maze(maze2Data, 40, 2, 4)};
 
 function startGame(level) {
-
+    $("#confetti").hide();
     currentLevel = levelSelector[level];
 
     player = new playerComponent(currentLevel.startPosX, currentLevel.startPosY, 50, 50, 10);

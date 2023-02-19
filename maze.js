@@ -80,10 +80,8 @@ function tileComponent(type, x, y, key) {
             ctx.drawImage(translatoeer, cameraPositionX, cameraPositionY, this.width, this.height);
         }
         else {
-            ctx.fillStyle = this.type;
+            ctx.drawImage(floorImage, cameraPositionX, cameraPositionY, this.width, this.height);
 
-
-            ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
         }
 
         
