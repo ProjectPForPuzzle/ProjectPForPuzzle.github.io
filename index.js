@@ -4,6 +4,11 @@ document.addEventListener("keyup", keyUpHandler, false);
 var player;
 var tutorial;
 var currentLevel;
+var score = 0;
+var highscore = 0;
+var username = "test";
+var scoreText = new textComponent("30px", "Arial", "white", window.innerWidth / 2 - 30,  window.innerHeight - 100);
+scoreText.text = "Score: 0";
 
 let rightDown = false;
 let leftDown = false;
@@ -20,7 +25,7 @@ let maze2Data = "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwkffffffffeffffffffffff
 const levelSelector = {"1": new Maze(tutorialMazeData, 40, 1, 1), "2": new Maze(maze1Data, 40, 1, 3), "3": new Maze(maze2Data, 40, 2, 4)};
 
 function startGame(level) {
-
+    $("#confetti").hide();
     currentLevel = levelSelector[level];
 
     player = new playerComponent(currentLevel.startPosX, currentLevel.startPosY, 50, 50, 10);

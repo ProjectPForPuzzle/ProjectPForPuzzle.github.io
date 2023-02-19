@@ -1,5 +1,5 @@
 const inputKey = { left: 37, up: 38, right: 39, down: 40 };
-tType = { "f": "Floor.png", "w": "walls2.png", "t": "#F3F322", "e": "Enemy.png", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
+tType = { "f": "Floor.png", "w": "walls2.png", "t": "Translator.png", "e": "Enemy.png", "s": "#FF00FF", "k": "#symbols", "x": "#000000" };
 
 const spriteOne = new Image();
 spriteOne.src = "one.png";
@@ -44,8 +44,12 @@ function playerComponent(x, y, width, height, speed) {
     this.carryingKeyText = new textComponent("30px", "Arial", "white", window.innerWidth / 2 - 100, 150);
     this.carryingKeyText.text = "";
     this.shakeFrames = 0;
+    this.score = 0;
+    this.confettiTimer = 0;
 
     this.update = function(maze) {
+        if (this.confettiTimer > 0) this.confettiTimer--;
+        if (this.confettiTimer <= 0) $("#confetti").hide();
         if (this.holdingKey) this.carryingKeyText.text = "Carrying key: cannot carry more"
         else this.carryingKeyText.text = ""
         if (this.shakeFrames > 0) this.shakeFrames--;
@@ -103,6 +107,8 @@ function playerComponent(x, y, width, height, speed) {
 
         if (colliding(this.x, this.y, this.width, this.height, maze.translator)) {
             this.holdingKey = false;
+            $("#confetti").show();
+            this.confettiTimer = 100;
             if (this.keysCollected == maze.translator.keysNeeded) {
                 this.finished = true;
             }
@@ -120,9 +126,19 @@ function playerComponent(x, y, width, height, speed) {
 
         if (colliding(this.x, this.y, this.width, this.height, maze.exit)) {
             if (this.finished) {
+                $("#confetti").show();
+                score += 100 * this.health;
+                scoreText.text = "Score: " + score;
                 world.stop();
                 levelNum++;
+
+                if (levelNum > 3) {
+                    window.location.href = 'youwin.html';
+                }
+                mySound.stop();
                 startGame("" + levelNum);
+                
+                
             }
         }
         
@@ -150,6 +166,7 @@ function playerComponent(x, y, width, height, speed) {
         ctx.restore();
         this.hpText.draw();
         this.carryingKeyText.draw();
+        scoreText.draw();
         //ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }

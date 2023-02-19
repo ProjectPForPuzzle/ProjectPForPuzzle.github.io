@@ -4,19 +4,17 @@
     <meta charset="UTF-8">
 
     <link rel="stylesheet" href="reset.css">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="game.css">
 </head>
 
-<body onload="startPage()">
-    <script src="startPage.js"></script>
-    <script src="playerDetails.js"></script>
-    <script src="leaderboard.js"></script>
-    <script src="camera.js"></script>
-    <script src="player.js"></script>
-    <script src="maze.js"></script>
-    <script src="enemy.js"></script>
-    <script src="text.js"></script>
-    <script src="index.js"></script>
+<body onload="var audio = new Audio('menu.mp3'); audio.play()">
+    <p> please enter username: </p><input id="hi">
+    <a href="game.html" onclick="saveUser()">Play the game!</a>
+    <a href="game.html"><img src=""></a>
+
+    <p><br>Project p for puzzle is a browser game about translating ciphers to escape a haunted maze. Your goal is to collect cipher keys, one at a time, and bring them to the translator for decoding. Although you start our lost in trnaslation, as you collect more ciphers, you will be able to get closer and closer to the true translation of the answer to the maze. Once you have collected enough ciphers, you will be able to progress through the maze. Can you get out alive?</p>
+    <script src="jquery/jquery-3.6.0.js"></script>
+    <script src="menu.js"></script>
 </body>
 
 </body>
