@@ -1,6 +1,8 @@
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
+//const tileType = { floor: "#212121", wall: "#FFFFFF", translator: "#F3F322" };
+
 var player;
 var monster;
 
@@ -10,10 +12,10 @@ let upDown = false;
 let downDown = false;
 
 function startGame() {
-    maze1 = new Maze(10);
+    maze1 = new Maze(22);
 
-    player = new playerComponent(1000, 1000);
-    monster = new enemyComponent();
+    player = new playerComponent(maze1.startTile.x + 5, maze1.startTile.y + 5);
+    monster = new enemyComponent(1200, 1200);
     world.camera = new camera(1000, 1000, window.innerWidth, window.innerHeight, 3000, 3000);
     world.camera.follow(player);
 
@@ -51,7 +53,7 @@ let counter = 0;
 function updateWorld() {
     // Update
     player.update(maze1);
-    monster.update(player);
+    monster.update(maze1, player);
     world.camera.update();
   
     counter++;
@@ -105,7 +107,7 @@ function intoWall(oldX, oldY, newX, newY, width, height, wall) {
     
     if (newBottom > wall.y && newTop < wall.y + wall.height && newLeft != oldLeft) {
         //push left
-        console.log(oldRight, newRight, wall.x);
+        console.log(oldX + width, newX + width, wall.x);
         if (oldRight < wall.x && newRight > wall.x) {
             console.log("push left");
 

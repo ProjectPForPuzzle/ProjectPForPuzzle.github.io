@@ -18,7 +18,7 @@ function enemyComponent(x, y, width, height, color, speed) {
     this.moveFrame = 0;
     this.state = state.updatingTarget;
 
-    this.update = function(target) {
+    this.update = function(maze, target) {
         if (this.state == state.updatingTarget) {
             this.lastTargetX = target.x;
             this.lastTargetY = target.y;
@@ -61,10 +61,41 @@ function enemyComponent(x, y, width, height, color, speed) {
         if (this.state == state.moving) {
             this.moveFrame++;
 
-            if (this.dir == compass.south) this.y += this.speed;
-            else if (this.dir == compass.north) this.y -= this.speed;
-            else if (this.dir == compass.east) this.x += this.speed;
-            else if (this.dir == compass.west) this.x -= this.speed;
+            let targetX = this.x;
+            let targetY = this.y;
+
+            if (this.dir == compass.south) targetY = this.y + this.speed;
+            else if (this.dir == compass.north) targetY = this.y - this.speed;
+            else if (this.dir == compass.east) targetX = this.x + this.speed;
+            else if (this.dir == compass.west) targetX -= this.x - this.speed;
+
+           
+
+            let updateX = targetX;
+            let updateY = targetY;
+            
+            if (targetX != this.x || targetY != this.y) {
+                for (let i = 0; i < maze.num_tiles; i++) {
+                    if (maze.tileSet[i].type == 1) {
+                        if (colliding(targetX, this.y, this.width, this.height, maze.tileSet[i])) {
+                            if (updateX + this.width > maze.tileSet[i].x && this.x + this.width < maze.tileSet[i].x) updateX = maze.tileSet[i].x - this.width - 1;
+                            else if (updateX < maze.tileSet[i].x + maze.tileSet[i].width && this.x > maze.tileSet[i].x + maze.tileSet[i].width) updateX = maze.tileSet[i].x + maze.tileSet[i].width + 1;
+
+                        }
+                        if (colliding(this.x, targetY, this.width, this.height, maze.tileSet[i])) {
+                            if (updateY + this.width > maze.tileSet[i].y && this.y + this.width < maze.tileSet[i].y) updateY = maze.tileSet[i].y - this.width - 1;
+                            else if (updateY < maze.tileSet[i].y + maze.tileSet[i].width && this.y > maze.tileSet[i].y + maze.tileSet[i].width) updateY = maze.tileSet[i].y + maze.tileSet[i].width + 1;
+
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+
+            this.x = updateX;
+            this.y = updateY;
         
 
             let xDist = Math.abs(this.x - target.x);

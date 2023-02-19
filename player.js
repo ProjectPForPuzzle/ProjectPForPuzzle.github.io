@@ -22,14 +22,22 @@ function playerComponent(x, y, width, height, color, speed) {
 
         let targetX = this.x + this.dirX * this.speed;
         let targetY = this.y + this.dirY * this.speed;
+
+        let updateX = targetX;
+        let updateY = targetY;
         
         if (targetX != this.x || targetY != this.y) {
             for (let i = 0; i < maze.num_tiles; i++) {
                 if (maze.tileSet[i].type == 1) {
-                    if (colliding(targetX, targetY, this.width, this.height, maze.tileSet[i])) {
-                        let ret = intoWall(this.x, this.y, targetX, targetY, this.width, this.height, maze.tileSet[i]);
-                        targetX = ret[0];
-                        targetY = ret[1];
+                    if (colliding(targetX, this.y, this.width, this.height, maze.tileSet[i])) {
+                        if (updateX + this.width > maze.tileSet[i].x && this.x + this.width < maze.tileSet[i].x) updateX = maze.tileSet[i].x - this.width - 1;
+                        else if (updateX < maze.tileSet[i].x + maze.tileSet[i].width && this.x > maze.tileSet[i].x + maze.tileSet[i].width) updateX = maze.tileSet[i].x + maze.tileSet[i].width + 1;
+
+                    }
+                    if (colliding(this.x, targetY, this.width, this.height, maze.tileSet[i])) {
+                        if (updateY + this.width > maze.tileSet[i].y && this.y + this.width < maze.tileSet[i].y) updateY = maze.tileSet[i].y - this.width - 1;
+                        else if (updateY < maze.tileSet[i].y + maze.tileSet[i].width && this.y > maze.tileSet[i].y + maze.tileSet[i].width) updateY = maze.tileSet[i].y + maze.tileSet[i].width + 1;
+
                     }
                     
                 }
@@ -38,8 +46,8 @@ function playerComponent(x, y, width, height, color, speed) {
             
         }
 
-        this.x = targetX;
-        this.y = targetY;
+        this.x = updateX;
+        this.y = updateY;
         
     }
 
