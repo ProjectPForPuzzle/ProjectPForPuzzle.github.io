@@ -16,6 +16,8 @@ function startGame() {
 
     player = new playerComponent(tutorial.startPosX, tutorial.startPosY, 50, 50, "red", 10);
 
+    blockingTile = new tileComponent("#FFFFFF", tutorial.startPosX - 80, tutorial.startPosY);
+
 
     world.camera = new camera(300, 300);
     world.camera.follow(player);
@@ -56,6 +58,7 @@ function updateWorld() {
     // Draw
     world.clear();
     tutorial.draw(world.camera);
+    //blockingTile.draw(world.camera);
     player.draw(world.camera);
 }
 
