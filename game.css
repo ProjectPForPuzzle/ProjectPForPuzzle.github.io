@@ -46,3 +46,9 @@ body {
     top: 0;
     z-index: 10;
   }
+
+  a {
+    font-size: 30px;
+    font-weight: bold;
+    font-family: NewRodin;
+  }

@@ -4,6 +4,11 @@ document.addEventListener("keyup", keyUpHandler, false);
 var player;
 var tutorial;
 var currentLevel;
+var score = 0;
+var highscore = 0;
+var username = "test";
+var scoreText = new textComponent("30px", "Arial", "white", window.innerWidth / 2 - 30,  window.innerHeight - 100);
+scoreText.text = "Score: 0";
 
 let rightDown = false;
 let leftDown = false;
