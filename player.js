@@ -2,25 +2,45 @@ const inputKey = { left: 37, up: 38, right: 39, down: 40 };
 tType = { "f": "#212121", "w": "#FFFFFF", "t": "#F3F322", "e": "#73F411", "s": "#FF00FF", "k": "#FFC0CB", "x": "#000000" };
 
 
-function playerComponent(x, y, width, height, color, speed) {
+function playerComponent(x, y, width, height, speed) {
     this.x = x || 0;
     this.y = y || 0;
     this.width = width || 50;
     this.height = height || 50;
-    this.color = color || "red";
+    this.image = new Image();
+    
+    this.sprites = new Array();
+    this.sprites[0] = "one.png";
+    this.sprites[1] = "one.png";
+    this.sprites[2] = "one.png";
+    this.sprites[3] = "one.png";
+    this.sprites[4] = "one.png";
+    this.image.src = this.sprites[0];
     this.dirX = 0;
     this.dirY = 0;
     this.speed = speed || 6;
     this.health = 3;
     this.hitFrame = 0;
+    this.animationFrame = 0;
+    this.facingLeft = false;
 
     this.update = function(maze) {
+        this.animationFrame++;
+        if (this.animationFrame > 49) this.animationFrame = 0;
+        this.image.src = this.sprites[Math.floor(this.animationFrame / 10)];
+        //console.log(Math.floor(this.animationFrame / 10));
         if (this.hitFrame > 0) this.hitFrame--;
-        if (this.hitFrame % 2 == 0) this.color = "green";
-        else this.color = "red";
+        //if (this.hitFrame % 2 == 0) this.color = "green";
+        //else this.color = "red";
         this.dirX = 0;
-        if (rightDown) this.dirX++;
-        if (leftDown) this.dirX--;
+        if (rightDown) {
+            this.dirX++; 
+            this.facingLeft = false;
+        }
+        if (leftDown) {
+            this.dirX--;
+            this.facingLeft = true;
+        }
 
         this.dirY = 0;
         if (downDown) this.dirY++;
@@ -59,14 +79,26 @@ function playerComponent(x, y, width, height, color, speed) {
     }
 
     this.draw = function(camera) {
+
         let cameraPositionX = camera.width / 2 + (this.x - camera.x);
         let cameraPositionY = camera.height / 2 + (this.y - camera.y);
         
         ctx = world.context;
 
-        ctx.fillStyle = this.color;
+        //ctx.fillStyle = this.color;
+        ctx.save();  
+        let horizontal = !this.facingLeft;
 
-        ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
+        
+        if (horizontal) {
+            console.log("yo")
+            ctx.translate(cameraPositionX + this.width, cameraPositionY);
+            ctx.scale(-1, 1);
+            ctx.drawImage(this.image, 0, 0, this.width, this.height);
+
+        } else ctx.drawImage(this.image, cameraPositionX, cameraPositionY, this.width, this.height);
+        ctx.restore();
+        //ctx.fillRect(cameraPositionX, cameraPositionY, this.width, this.height);
     }
 }
 
