@@ -7,7 +7,7 @@ function tileComponent(size, color, x, y) {
     this.draw = function() {
         ctx = world.context;
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.fillRect(this.x, this.y, this.size, this.size);
     }
 }
 
